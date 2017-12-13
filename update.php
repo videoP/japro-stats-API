@@ -47,7 +47,7 @@
 			$exists = sql2arr2($result);
 			$result->finalize();
 
-		    if($exists){
+			if($exists){
 			    foreach ($exists as $key => $value) {
 			    	$newArray[]=array(0=>$value["username"],1=>$value["coursename"],2=>$value["style"],3=>$value["topspeed"],4=>$value["average"],5=>$value["duration_ms"],6=>$value["end_time"],7=>$value["rank"]); 
 			    }
@@ -65,7 +65,7 @@
 			$exists = sql2arr2($result);
 			$result->finalize();
 
-		    if($exists){
+			if($exists){
 			    foreach ($exists as $key => $value) {
 			    	$newArray[]=array(0=>$value["winner"],1=>$value["loser"],2=>$value["type"],3=>$value["duration"],4=>$value["winner_hp"],5=>$value["winner_shield"],6=>$value["end_time"],7=>$value["winner_elo"],8=>$value["loser_elo"],9=>$value["odds"]); 
 			    }
@@ -97,7 +97,7 @@
 			$exists = sql2arr2($result);
 			$result->finalize();
 
-		    if($exists){
+			if($exists){
 			    foreach ($exists as $key => $value) {
 			    	$newArray[]=array(0=>$value["username"],1=>$value["kills"],2=>$value["deaths"],3=>$value["suicides"],4=>$value["captures"],5=>$value["returns"],6=>$value["lastlogin"],7=>$value["created"]); 
 			    }
