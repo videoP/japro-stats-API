@@ -1,12 +1,6 @@
 <?php
 
-define("TITLE","jaPRO - WebApp");
-define("NAME","jaPRO");
-define("VERSION","v.0.2");
-define("DATABASE_ROUTE","/usr/share/nginx/html/web/japro/data.db");
-define("COLOR","#ffffff,#000000");
-define("LANG","EN");
-
+define("DATABASE_ROUTE","japro/data.db");
 set_time_limit(45); //?
 
 class MyDB extends SQLite3 {
