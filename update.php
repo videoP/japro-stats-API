@@ -29,7 +29,7 @@
 
 	require_once('logins.php');
 
-	if ( ! isset($logins[$username]) or $logins[$username] != $password) {
+	if (!isset($logins[$username]) or $logins[$username] != $password) {
 		echo "Bad credentials";
 		exit();
 	}
@@ -40,16 +40,15 @@
 		case "races":
 			$newArray = null;
 
-			$stmt = $db->prepare("SELECT * FROM LocalRun WHERE end_time > :end_time ORDER BY end_time DESC");
-
-			$stmt->bindValue(":end_time", $last_update, SQLITE3_TEXT);
+			$stmt = $db->prepare("SELECT username, coursename, style, duration_ms, topspeed, average, end_time, rank, entries FROM LocalRun WHERE last_update > :last_update ORDER BY end_time DESC");
+			$stmt->bindValue(":last_update", $last_update, SQLITE3_TEXT);
 			$result = $stmt->execute();
 			$exists = sql2arr2($result);
 			$result->finalize();
 
 			if($exists){
 			    foreach ($exists as $key => $value) {
-			    	$newArray[]=array(0=>$value["username"],1=>$value["coursename"],2=>$value["style"],3=>$value["topspeed"],4=>$value["average"],5=>$value["duration_ms"],6=>$value["end_time"],7=>$value["rank"]); 
+			    	$newArray[]=array(0=>$value["username"],1=>$value["coursename"],2=>$value["style"],3=>$value["duration_ms"],4=>$value["topspeed"],5=>$value["average"],6=>$value["end_time"],7=>$value["rank"],8=>$value["entries"]); 
 			    }
 			}
 			$json = json_encode($newArray);
@@ -58,8 +57,7 @@
 		case "duels":
 		 	$newArray = null;
 
-			$stmt = $db->prepare("SELECT * FROM LocalDuel WHERE end_time > :end_time ORDER BY end_time DESC");
-
+			$stmt = $db->prepare("SELECT winner, loser, type, duration, winner_hp, winner_shield, end_time, winner_elo, loser_elo, odds FROM LocalDuel WHERE end_time > :end_time ORDER BY end_time DESC");
 			$stmt->bindValue(":end_time", $last_update, SQLITE3_TEXT);
 			$result = $stmt->execute();
 			$exists = sql2arr2($result);
@@ -73,25 +71,10 @@
 			$json = json_encode($newArray);
 		break;
 
-		case "raceranks": //This is hard.. just do everything lol?
-		 	$newArray = null;
-
-			$query = "SELECT * FROM RaceRanks ORDER BY username DESC";
-			$arr = sql2arr($query);
-
-			if($arr) {
-			    foreach ($arr as $key => $value) {
-			    	$newArray[]=array(0=>$value["username"],1=>$value["style"],2=>$value["score"],3=>$value["percentilesum"],4=>$value["ranksum"],5=>$value["golds"],6=>$value["silvers"],7=>$value["bronzes"],8=>$value["count"]); 
-			    }
-			}
-			$json = json_encode($newArray);
-		break;
-
 		case "accounts":
 		 	$newArray = null;
 
-			$stmt = $db->prepare("SELECT * FROM LocalAccount WHERE lastlogin > :lastlogin ORDER BY lastlogin DESC");
-
+			$stmt = $db->prepare("SELECT username, kills, deaths, suicides, captures, returns, lastlogin, created FROM LocalAccount WHERE lastlogin > :lastlogin ORDER BY lastlogin DESC");
 			$stmt->bindValue(":lastlogin", $last_update, SQLITE3_TEXT);
 			$result = $stmt->execute();
 			$exists = sql2arr2($result);
@@ -104,10 +87,9 @@
 			}
 			$json = json_encode($newArray);
 		break;
-
 	}
 
-	//ob_start('ob_gzhandler'); //Compress json
+	ob_start('ob_gzhandler'); //Compress json
 	echo $json;
 	$db->close();
 

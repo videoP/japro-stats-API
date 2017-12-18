@@ -1,6 +1,6 @@
 <?php
 
-define("DATABASE_ROUTE","japro/data.db");
+define("DATABASE_ROUTE","/japro/data.db");
 set_time_limit(45); //?
 
 class MyDB extends SQLite3 {
@@ -11,8 +11,6 @@ class MyDB extends SQLite3 {
 $db = new MyDB();
 if(!$db) {
    echo $db->lastErrorMsg();
-} else {
-   //echo "Opened database successfully\n";
 }
    
 function sql2arr2($results){ //For prepared statements that needed to be bound
