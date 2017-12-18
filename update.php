@@ -40,7 +40,7 @@
 		case "races":
 			$newArray = null;
 
-			$stmt = $db->prepare("SELECT username, coursename, style, duration_ms, topspeed, average, end_time, rank, entries FROM LocalRun WHERE last_update > :last_update ORDER BY end_time DESC");
+			$stmt = $db->prepare("SELECT username, coursename, style, duration_ms, topspeed, average, end_time, rank, entries, last_update FROM LocalRun WHERE last_update > :last_update ORDER BY end_time DESC");
 			$stmt->bindValue(":last_update", $last_update, SQLITE3_TEXT);
 			$result = $stmt->execute();
 			$exists = sql2arr2($result);
@@ -48,7 +48,7 @@
 
 			if($exists){
 			    foreach ($exists as $key => $value) {
-			    	$newArray[]=array(0=>$value["username"],1=>$value["coursename"],2=>$value["style"],3=>$value["duration_ms"],4=>$value["topspeed"],5=>$value["average"],6=>$value["end_time"],7=>$value["rank"],8=>$value["entries"]); 
+			    	$newArray[]=array(0=>$value["username"],1=>$value["coursename"],2=>$value["style"],3=>$value["duration_ms"],4=>$value["topspeed"],5=>$value["average"],6=>$value["end_time"],7=>$value["rank"],8=>$value["entries"],9=>$value["last_update"]); 
 			    }
 			}
 			$json = json_encode($newArray);
