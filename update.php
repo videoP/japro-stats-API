@@ -48,7 +48,24 @@
 
 			if($exists){
 			    foreach ($exists as $key => $value) {
-			    	$newArray[]=array(0=>$value["username"],1=>$value["coursename"],2=>$value["style"],3=>$value["duration_ms"],4=>$value["topspeed"],5=>$value["average"],6=>$value["end_time"],7=>$value["rank"],8=>$value["entries"]); 
+					$newArray[]=array(0=>$value["username"],1=>$value["coursename"],2=>$value["style"],3=>$value["duration_ms"],4=>$value["topspeed"],5=>$value["average"],6=>$value["end_time"],7=>$value["rank"],8=>$value["entries"]); 
+			    }
+			}
+			$json = json_encode($newArray);
+		break;
+
+		case "race_demos":
+			$newArray = null;
+
+			$stmt = $db->prepare("SELECT username, coursename, style, rank FROM LocalRun WHERE rank = 1 AND last_update > :last_update ORDER BY end_time DESC");
+			$stmt->bindValue(":last_update", $last_update, SQLITE3_TEXT);
+			$result = $stmt->execute();
+			$exists = sql2arr2($result);
+			$result->finalize();
+
+			if($exists){
+				foreach ($exists as $key => $value) {
+					$newArray[]=array(0=>$value["username"],1=>$value["coursename"],2=>$value["style"],7=>$value["rank"]); 
 			    }
 			}
 			$json = json_encode($newArray);
@@ -64,8 +81,8 @@
 			$result->finalize();
 
 			if($exists){
-			    foreach ($exists as $key => $value) {
-			    	$newArray[]=array(0=>$value["winner"],1=>$value["loser"],2=>$value["type"],3=>$value["duration"],4=>$value["winner_hp"],5=>$value["winner_shield"],6=>$value["end_time"],7=>$value["winner_elo"],8=>$value["loser_elo"],9=>$value["odds"]); 
+				foreach ($exists as $key => $value) {
+					$newArray[]=array(0=>$value["winner"],1=>$value["loser"],2=>$value["type"],3=>$value["duration"],4=>$value["winner_hp"],5=>$value["winner_shield"],6=>$value["end_time"],7=>$value["winner_elo"],8=>$value["loser_elo"],9=>$value["odds"]); 
 			    }
 			}
 			$json = json_encode($newArray);
@@ -82,7 +99,7 @@
 
 			if($exists){
 			    foreach ($exists as $key => $value) {
-			    	$newArray[]=array(0=>$value["username"],1=>$value["kills"],2=>$value["deaths"],3=>$value["suicides"],4=>$value["captures"],5=>$value["returns"],6=>$value["lastlogin"],7=>$value["created"]); 
+					$newArray[]=array(0=>$value["username"],1=>$value["kills"],2=>$value["deaths"],3=>$value["suicides"],4=>$value["captures"],5=>$value["returns"],6=>$value["lastlogin"],7=>$value["created"]); 
 			    }
 			}
 			$json = json_encode($newArray);

@@ -11,6 +11,7 @@
     <div id="content" style="margin-top: 100px;">
       <form action="update.php" method="post">
         <input type="radio" name="type" value="races" checked> All races (LocalRun table) since last update<br>
+        <input type="radio" name="type" value="race_demos"> Gold medal username-course-style's (LocalRun table) since last update (for demo collection)<br>
         <input type="radio" name="type" value="duels"> All duels (LocalDuel table) since last update<br>
         <input type="radio" name="type" value="accounts"> Account info since last update<br>
 
