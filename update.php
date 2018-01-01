@@ -40,7 +40,7 @@
 		case "races":
 			$newArray = null;
 
-			$stmt = $db->prepare("SELECT username, coursename, style, duration_ms, topspeed, average, end_time, rank, entries FROM LocalRun WHERE last_update > :last_update ORDER BY end_time DESC");
+			$stmt = $db->prepare("SELECT username, coursename, style, season, duration_ms, topspeed, average, end_time, rank, entries, season_rank, season_entries FROM LocalRun WHERE last_update > :last_update ORDER BY end_time DESC");
 			$stmt->bindValue(":last_update", $last_update, SQLITE3_TEXT);
 			$result = $stmt->execute();
 			$exists = sql2arr2($result);
@@ -48,7 +48,7 @@
 
 			if($exists){
 			    foreach ($exists as $key => $value) {
-					$newArray[]=array(0=>$value["username"],1=>$value["coursename"],2=>$value["style"],3=>$value["duration_ms"],4=>$value["topspeed"],5=>$value["average"],6=>$value["end_time"],7=>$value["rank"],8=>$value["entries"]); 
+					$newArray[]=array(0=>$value["username"],1=>$value["coursename"],2=>$value["style"],3=>$value["season"],4=>$value["duration_ms"],5=>$value["topspeed"],6=>$value["average"],7=>$value["end_time"],8=>$value["rank"],9=>$value["entries"],10=>$value["season_rank"],11=>$value["season_entries"]); 
 			    }
 			}
 			$json = json_encode($newArray);
@@ -57,7 +57,9 @@
 		case "race_demos":
 			$newArray = null;
 
-			$stmt = $db->prepare("SELECT username, coursename, style, rank FROM LocalRun WHERE rank = 1 AND last_update > :last_update ORDER BY end_time DESC");
+			//$stmt = $db->prepare("SELECT username, coursename, style, rank FROM LocalRun WHERE rank = 1 AND last_update > :last_update ORDER BY end_time DESC"); //Should be regardless of season, use duration_ms
+			$stmt = $db->prepare("SELECT username, coursename, style, MIN(duration_ms) FROM LocalRun WHERE last_update >:last_update GROUP BY coursename, style ORDER BY end_time DESC"); //Use this to ignore season
+
 			$stmt->bindValue(":last_update", $last_update, SQLITE3_TEXT);
 			$result = $stmt->execute();
 			$exists = sql2arr2($result);
