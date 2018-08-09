@@ -67,7 +67,8 @@
 
 			if($exists){
 				foreach ($exists as $key => $value) {
-					$newArray[]=array(0=>$value["username"],1=>$value["coursename"],2=>$value["style"],7=>$value["rank"]); 
+					//$newArray[]=array(0=>"http://162.248.89.208/races/" . $value["username"] . "/" . $value["username"] . "-" . $value["coursename"] . $value["style"] . ".dm_26"); 
+					$newArray[]=array(0=>$value["username"],1=>$value["coursename"],2=>$value["style"]); 
 			    }
 			}
 			$json = json_encode($newArray);
@@ -102,6 +103,40 @@
 			if($exists){
 			    foreach ($exists as $key => $value) {
 					$newArray[]=array(0=>$value["username"],1=>$value["kills"],2=>$value["deaths"],3=>$value["suicides"],4=>$value["captures"],5=>$value["returns"],6=>$value["lastlogin"],7=>$value["created"]); 
+			    }
+			}
+			$json = json_encode($newArray);
+		break;
+
+		case "teams":
+		 	$newArray = null;
+
+			$stmt = $db->prepare("SELECT name, tag, longname, flags FROM LocalTeam DESC"); //Add last_update ?
+			//$stmt->bindValue(":lastlogin", $last_update, SQLITE3_TEXT);
+			$result = $stmt->execute();
+			$exists = sql2arr2($result);
+			$result->finalize();
+
+			if($exists){
+			    foreach ($exists as $key => $value) {
+					$newArray[]=array(0=>$value["name"],1=>$value["tag"],2=>$value["longname"],3=>$value["flags"]); 
+			    }
+			}
+			$json = json_encode($newArray);
+		break;
+
+		case "team_accounts":
+		 	$newArray = null;
+
+			$stmt = $db->prepare("SELECT team, account, flags FROM LocalTeamAccount DESC"); //Add last_update ?
+			//$stmt->bindValue(":lastlogin", $last_update, SQLITE3_TEXT);
+			$result = $stmt->execute();
+			$exists = sql2arr2($result);
+			$result->finalize();
+
+			if($exists){
+			    foreach ($exists as $key => $value) {
+					$newArray[]=array(0=>$value["team"],1=>$value["account"],2=>$value["flags"]); 
 			    }
 			}
 			$json = json_encode($newArray);
